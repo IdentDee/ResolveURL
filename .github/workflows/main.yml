@@ -27,5 +27,6 @@ jobs:
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
       with:
+        tag: '5.1.94'
         artifacts: "script.module.resolveurl.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
