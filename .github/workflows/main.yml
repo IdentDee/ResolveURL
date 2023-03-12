@@ -21,3 +21,8 @@ jobs:
         filename: 'script.module.resolveurl.xxx.zip'
         directory: 'script.module.resolveurl.xxx'
         exclusions: '*.git*'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        artifacts: "script.module.resolveurl.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
