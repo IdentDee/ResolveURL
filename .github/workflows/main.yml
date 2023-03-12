@@ -1,14 +1,8 @@
 name: Create Archive
 on: 
-  push:
+  create:
     tags:
-    - '*'
-  workflow_dispatch:
-    inputs:
-      tags:
-        description: 'Tag for release'
-        required: true
-        default: 'latest'
+    - 'v*'
 jobs:
   build:
     runs-on: ubuntu-latest
