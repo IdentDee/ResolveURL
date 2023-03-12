@@ -1,7 +1,6 @@
 name: Create Archive
 on: 
-  release:
-    types: [published]
+  create:
     tags:
     - 'v*'
 jobs:
