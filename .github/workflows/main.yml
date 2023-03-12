@@ -24,13 +24,16 @@ jobs:
         filename: 'script.module.resolveurl.xxx.zip'
         path: 'script.module.resolveurl.xxx'
         exclusions: '*.git*'
-    - name: Show folder
-      run: |
-        cd script.module.resolveurl
-        ls -al
+    - name: Archive smr_link_tester
+      uses: thedoctor0/zip-release@0.7.1
+      with:
+        type: 'zip'
+        filename: 'plugin.video.smr_link_tester.zip'
+        path: 'plugin.video.smr_link_tester'
+        exclusions: '*.git*'
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
       with:
         allowUpdates: true
-        artifacts: "script.module.resolveurl.zip, script.module.resolveurl.xxx.zip"
+        artifacts: "script.module.resolveurl.zip, script.module.resolveurl.xxx.zip, plugin.video.smr_link_tester.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
