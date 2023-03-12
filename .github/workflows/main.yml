@@ -15,14 +15,14 @@ jobs:
       with:
         type: 'zip'
         filename: 'script.module.resolveurl.zip'
-        directory: 'script.module.resolveurl'
+        path: 'script.module.resolveurl'
         exclusions: '*.git*'
     - name: Archive resolveurl.xxx
       uses: thedoctor0/zip-release@0.7.1
       with:
         type: 'zip'
         filename: 'script.module.resolveurl.xxx.zip'
-        directory: 'script.module.resolveurl.xxx'
+        path: 'script.module.resolveurl.xxx'
         exclusions: '*.git*'
     - name: Show folder
       run: |
@@ -32,5 +32,5 @@ jobs:
       uses: ncipollo/release-action@v1.12.0
       with:
         allowUpdates: true
-        artifacts: "script.module.resolveurl/script.module.resolveurl.zip, script.module.resolveurl.xxx/script.module.resolveurl.xxx.zip"
+        artifacts: "script.module.resolveurl.zip, script.module.resolveurl.xxx.zip"
         token: ${{ secrets.GITHUB_TOKEN }}
