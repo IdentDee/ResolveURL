@@ -5,7 +5,7 @@ on:
     - '*'
   workflow_dispatch:
     inputs:
-      tag:
+      tags:
         description: 'Tag for release'
         required: true
         default: 'latest'
