@@ -26,6 +26,7 @@ jobs:
         exclusions: '*.git*'
     - name: Show folder
       run: |
+        cd script.module.resolveurl
         ls -al
     - name: Upload Release
       uses: ncipollo/release-action@v1.12.0
