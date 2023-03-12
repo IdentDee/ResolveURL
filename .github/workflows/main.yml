@@ -10,5 +10,12 @@ jobs:
       with:
         type: 'zip'
         filename: 'script.module.resolveurl.zip'
-        directory: '.'
+        directory: 'script.module.resolveurl'
+        exclusions: '*.git* .editorconfig'
+    - name: Archive resolveurl.xxx
+      uses: thedoctor0/zip-release@0.7.1
+      with:
+        type: 'zip'
+        filename: 'script.module.resolveurl.xxx.zip'
+        directory: 'script.module.resolveurl.xxx'
         exclusions: '*.git* .editorconfig'
