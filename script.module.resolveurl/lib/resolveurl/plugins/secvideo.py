@@ -16,33 +16,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import json
-from resolveurl import common
+import re
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
+from resolveurl import common
 
 
-class InPornResolver(ResolveUrl):
-    name = 'inporn'
-    domains = ['inporn.com']
-    pattern = r'(?://|\.)(inporn\.com)/video/([0-9]+)'
+class SecVideoResolver(ResolveUrl):
+    name = 'SecVideo'
+    domains = ['secvideo1.online', 'csst.online']
+    pattern = r'(?://|\.)((?:secvideo1|csst)\.online)/(?:videos|embed)/([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
+        headers = {'User-Agent': common.FF_USER_AGENT}
         html = self.net.http_GET(web_url, headers=headers).content
-        r = json.loads(html)[0]
-        if r.get('video_url'):
-            vurl = 'https://{0}{1}'.format(host, helpers.base164(r.get('video_url')))
-            headers.update({'Referer': 'https://{0}/'.format(host)})
-            surl = helpers.get_redirect_url(vurl, headers)
-            if surl != vurl:
-                return surl + helpers.append_headers(headers)
-        raise ResolverError('File not found')
+        srcs = re.search(r'Playerjs.+?file:"([^"]+)', html, re.DOTALL)
+        if srcs:
+            srcs = srcs.group(1).split(',')
+            srcs = [(x.split(']')[0][1:], x.split(']')[1]) for x in srcs]
+            return helpers.pick_source(helpers.sort_sources_list(srcs)) + helpers.append_headers(headers)
+
+        raise ResolverError('No playable video found.')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/api/videofile.php?video_id={media_id}&lifetime=8640000')
-
-    @classmethod
-    def _is_enabled(cls):
-        return True
+        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}/')
