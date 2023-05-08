@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2021 gujal
+    Copyright (C) 2023 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,28 +16,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from six.moves import urllib_parse
+from resolveurl.lib import helpers
 
 
-class SpeedoStreamResolver(ResolveGeneric):
-    name = 'SpeedoStream'
-    domains = ['speedostream.com', 'speedostream.nl', 'speedostream.pm']
-    pattern = r'(?://|\.)(speedostream\.(?:com|nl|pm))/(?:embed-)?([^\n]+)'
+class VidLookResolver(ResolveGeneric):
+    name = 'VidLook'
+    domains = ['vidlook.net']
+    pattern = r'(?://|\.)(vidlook\.net)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
-        if '$$' in media_id:
-            media_id, referer = media_id.split('$$')
-            referer = urllib_parse.urljoin(referer, '/')
-        else:
-            referer = True
         return helpers.get_media_url(
             self.get_url(host, media_id),
-            patterns=[r'''sources\s*:\s*\[{file:\s*"(?P<url>[^"]+)'''],
-            generic_patterns=False,
-            referer=referer
+            patterns=[r'''sources:\s*\[{\s*file:?\s*"(?P<url>[^"]+)'''],
+            generic_patterns=False
         )
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')

@@ -17,31 +17,37 @@
 """
 
 import json
+import six
 from resolveurl import common
 from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class InPornResolver(ResolveUrl):
-    name = 'inporn'
-    domains = ['inporn.com']
-    pattern = r'(?://|\.)(inporn\.com)/video/([0-9]+)'
+class VipTubeResolver(ResolveUrl):
+    name = 'VipTube'
+    domains = ['viptube.com', 'proporn.com', 'vivatube.com', 'winporn.com']
+    pattern = r'(?://|\.)((?:viptube|proporn|vivatube|winporn)\.com)/(?:\w\w/)?(?:video|embed)/([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
-        html = self.net.http_GET(web_url, headers=headers).content
-        r = json.loads(html)[0]
-        if r.get('video_url'):
-            vurl = 'https://{0}{1}'.format(host, helpers.base164(r.get('video_url')))
-            headers.update({'Referer': 'https://{0}/'.format(host)})
-            surl = helpers.get_redirect_url(vurl, headers)
-            if surl != vurl:
-                return surl + helpers.append_headers(headers)
+        headers = {'User-Agent': common.RAND_UA,
+                   'Referer': 'https://www.{0}/'.format(host)}
+        resp = self.net.http_GET(web_url, headers=headers).content
+        jdata = json.loads(resp).get('files')
+        if jdata:
+            sources = []
+            for k, v in six.iteritems(jdata):
+                qual = {'lq': '360p', 'hq': '720p', '4k': '2160p'}.get(k)
+                if v:
+                    sources.append((qual, v))
+
+        if sources:
+            return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
+
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/api/videofile.php?video_id={media_id}&lifetime=8640000')
+        return self._default_get_url(host, media_id, template='https://www.{host}/player_config_json/?vid={media_id}')
 
     @classmethod
     def _is_enabled(cls):
