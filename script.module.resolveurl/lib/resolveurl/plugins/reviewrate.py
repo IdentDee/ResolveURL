@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2021 shellc0de
+    Copyright (c) 2023 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,20 +17,12 @@
 """
 
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
-from resolveurl.lib import helpers
 
 
-class VTubeResolver(ResolveGeneric):
-    name = 'VTube'
-    domains = ['vtube.to', 'vtplay.net', 'vtbe.net']
-    pattern = r'(?://|\.)(vt(?:u?be|play)\.(?:to|net))/(?:embed-)?([0-9a-zA-Z]+)'
-
-    def get_media_url(self, host, media_id):
-        return helpers.get_media_url(
-            self.get_url(host, media_id),
-            patterns=[r'''sources:\s*\[{file:\s*["'](?P<url>[^"']+)'''],
-            generic_patterns=False
-        )
+class ReviewRateResolver(ResolveGeneric):
+    name = 'ReviewRate'
+    domains = ['reviewrate.net']
+    pattern = r'(?://)((?:.*\.)?reviewrate\.net)/(?:embed-)?([0-9a-zA-Z]+)'
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://vtbe.net/embed-{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://{host}/embed-{media_id}.html')

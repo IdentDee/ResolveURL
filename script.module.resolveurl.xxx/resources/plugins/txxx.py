@@ -24,8 +24,13 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 class TxxxResolver(ResolveUrl):
     name = 'Txxx'
-    domains = ['txxx.com', 'bdsmx.tube', 'blackporn.tube', 'hclips.com', 'inporn.com', 'voyeurhit.com']
-    pattern = r'(?://|\.)((?:txxx|bdsmx|blackporn|hclips|inporn|voyeurhit)\.(?:com|tube))/(?:videos?|embed)/([a-zA-Z0-9]+)'
+    domains = ['txxx.com', 'bdsmx.tube', 'blackporn.tube', 'hclips.com', 'inporn.com',
+               'voyeurhit.com', 'gettranny.com', 'mrgay.tube', 'shemalez.com', 'vxxx.com',
+               'upornia.com', 'thegay.com', 'hdzog.com']
+    pattern = r'(?://|\.)' \
+              r'((?:[tv]xxx|bdsmx|blackporn|hclips|inporn|voyeurhit|gettranny|mrgay|shemalez|upornia|' \
+              r'thegay|hdzog)' \
+              r'\.(?:com|tube))/(?:videos?|embed)[/-]([a-zA-Z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -34,9 +39,9 @@ class TxxxResolver(ResolveUrl):
             'Referer': 'https://{0}/'.format(host)
         }
         html = self.net.http_GET(web_url, headers=headers).content
-        r = re.search('video_url":"([^"]+)', html)
+        r = re.findall('video_url":"([^"]+)', html)
         if r:
-            videourl = helpers.Tdecode(r.group(1))
+            videourl = helpers.Tdecode(r[-1])
             if videourl.startswith('/'):
                 videourl = 'https://{0}{1}'.format(host, videourl)
             return videourl + helpers.append_headers(headers)
@@ -44,7 +49,7 @@ class TxxxResolver(ResolveUrl):
         raise ResolverError('File not found')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='http://{host}/api/videofile.php?video_id={media_id}&lifetime=8640000')
+        return self._default_get_url(host, media_id, template='https://{host}/api/videofile.php?video_id={media_id}&lifetime=8640000')
 
     @classmethod
     def _is_enabled(cls):
