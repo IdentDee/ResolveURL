@@ -1,23 +1,22 @@
-Version 5.1.105 (Aug 06, 2023)
+Version 5.1.107 (Aug 25, 2023)
 - Code Base Changes:
-    - Add b64decode to helpers
-    - Add aadecode v2 support
+    - Use localisation strings inside Debrid resolvers
 
 - Resolvers Added:
-    - vidguard
+    - updown
+    - vidtube
 
 - Resolvers Fixed/Updated:
-    - doodstream
-    - drkvid
+    - alldebrid
+    - cda.pl
     - filelions
-    - filemoon
-    - mixdrop
-    - streamtape
+    - reviewtech
     - streamwish
-    - vtube
+    - vidguard
+    - voesx
 
 - Resolvers Removed
     - None
 
 - Languages Added/Updated
-    - None
+    - All
