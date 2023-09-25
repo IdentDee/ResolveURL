@@ -1,18 +1,15 @@
-Version 5.1.107 (Aug 25, 2023)
+Version 5.1.109 (Sep 17, 2023)
 - Code Base Changes:
-    - Use localisation strings inside Debrid resolvers
+    - pyaes python 3.9+ fix
 
 - Resolvers Added:
-    - updown
-    - vidtube
+    - fileupload
 
 - Resolvers Fixed/Updated:
     - alldebrid
-    - cda.pl
     - filelions
-    - reviewtech
-    - streamwish
-    - vidguard
+    - updown
+    - videooo
     - voesx
 
 - Resolvers Removed
