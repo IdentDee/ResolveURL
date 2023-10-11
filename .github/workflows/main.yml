@@ -1,0 +1,33 @@
+name: Create Archive
+on: 
+  create:
+    tags:
+    - 'v*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@master
+    - name: Archive resolveurl
+      uses: thedoctor0/zip-release@0.7.1
+      with:
+        type: 'zip'
+        filename: 'script.module.resolveurl.zip'
+        path: 'script.module.resolveurl'
+        exclusions: '*.git*'
+    - name: Archive resolveurl.xxx
+      uses: thedoctor0/zip-release@0.7.1
+      with:
+        type: 'zip'
+        filename: 'script.module.resolveurl.xxx.zip'
+        path: 'script.module.resolveurl.xxx'
+        exclusions: '*.git*'
+    - name: Upload Release
+      uses: ncipollo/release-action@v1.12.0
+      with:
+        allowUpdates: true
+        artifacts: "script.module.resolveurl.zip, script.module.resolveurl.xxx.zip"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
