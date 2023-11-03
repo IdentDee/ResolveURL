@@ -1,6 +1,6 @@
 """
     Plugin for ResolveUrl
-    Copyright (C) 2023 gujal
+    Copyright (C) 2023 shellc0de, gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -48,13 +48,10 @@ class FileMoonResolver(ResolveUrl):
         r = re.search(r'var\s*postData\s*=\s*(\{.+?\})', html, re.DOTALL)
         if r:
             r = r.group(1)
-            b = re.findall(r"b:\s*'([^']+)", r)[0]
-            file_code = re.findall(r"file_code:\s*'([^']+)", r)[0]
-            fhash = re.findall(r"hash:\s*'([^']+)", r)[0]
             pdata = {
-                'b': b,
-                'file_code': file_code,
-                'hash': fhash
+                'b': re.findall(r"b:\s*'([^']+)", r)[0],
+                'file_code': re.findall(r"file_code:\s*'([^']+)", r)[0],
+                'hash': re.findall(r"hash:\s*'([^']+)", r)[0]
             }
             headers.update({
                 'Referer': web_url,
@@ -67,6 +64,14 @@ class FileMoonResolver(ResolveUrl):
             if surl:
                 headers.pop('X-Requested-With')
                 return surl + helpers.append_headers(headers)
+        else:
+            r = re.search(r'sources:\s*\[{\s*file:\s*"([^"]+)', html, re.DOTALL)
+            if r:
+                headers.update({
+                    'Referer': web_url,
+                    'Origin': urllib_parse.urljoin(web_url, '/')[:-1]
+                })
+                return r.group(1) + helpers.append_headers(headers)
 
         raise ResolverError('Video not found')
 
